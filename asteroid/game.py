@@ -25,8 +25,9 @@ class asteroids():
 
     @abstractmethod
     def _process_game_logic(self):
+        # pygame.sprite.collide_circle()
         pass
-        
+
     def _draw(self):
          self.screen.blit(self.background, (0,0))
          pygame.display.flip()
