@@ -1,15 +1,14 @@
 import pygame
-from abc import abstractmethod
 from utils import load_sprite
-from models import GameObject
+from models import Spaceship
 
 class asteroids():
     def __init__(self):
         self._init_pygame()
         self.screen = pygame.display.set_mode((800, 600))
         self.background = load_sprite('space', False)
-        self.spaceship = GameObject((400, 300), load_sprite("spaceship"), (0, 0))
-        self.asteroid = GameObject((400, 300), load_sprite('asteroid'), (1, 0))
+        self.clock = pygame.time.Clock()
+        self.spaceship = Spaceship((400, 300))
     
     def main_loop(self):
         while True:
@@ -26,13 +25,11 @@ class asteroids():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 quit()
 
-    @abstractmethod
     def _process_game_logic(self):
-        self.spaceship.move()
-        self.asteroid.move()
+        self.spaceship.move
 
     def _draw(self):
-         self.screen.blit(self.background, (0,0))
-         self.spaceship.draw(self.screen)
-         self.asteroid.draw(self.screen)
-         pygame.display.flip()
+        self.screen.blit(self.background, (0,0))
+        self.spaceship
+        pygame.display.flip()
+        self.clock.tick(60)
