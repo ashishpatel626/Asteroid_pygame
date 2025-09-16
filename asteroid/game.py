@@ -26,10 +26,10 @@ class asteroids():
                 quit()
 
     def _process_game_logic(self):
-        self.spaceship.move
+        self.spaceship.move()
 
     def _draw(self):
         self.screen.blit(self.background, (0,0))
-        self.spaceship
+        self.spaceship.draw(self.screen)
         pygame.display.flip()
         self.clock.tick(60)
