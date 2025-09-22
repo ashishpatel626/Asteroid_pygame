@@ -24,9 +24,18 @@ class asteroids():
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 quit()
+        
+        is_key_pressed = pygame.key.get_pressed()
+
+        if is_key_pressed[pygame.K_d]:
+            self.spaceship.rotate(clockwise=True)
+        elif is_key_pressed[pygame.K_a]:
+            self.spaceship.rotate(clockwise=False)
+        if is_key_pressed[pygame.K_w]:
+            self.spaceship.accelerate()
 
     def _process_game_logic(self):
-        self.spaceship.move()
+        self.spaceship.move(self.screen)
 
     def _draw(self):
         self.screen.blit(self.background, (0,0))
