@@ -1,13 +1,13 @@
 from pygame import Surface
 from pygame.math import Vector2
-from utils import load_sprite, wrap_position
+from utils import load_sprite, wrap_position, get_random_velocity
 from typing import Any
 from pygame.transform import rotozoom
 
 UP = Vector2(0, -1)
 
 class GameObject:
-    def __init__(self, position: tuple[int, int], sprite: Surface, velocity: Any):
+    def __init__(self, position: Vector2, sprite: Surface, velocity: Any):
         self.postion = Vector2(position)
         self.spirte = sprite
         self.radius = sprite.get_width() / 2
@@ -28,7 +28,7 @@ class Spaceship(GameObject):
     MANEUVERABILITY = 3
     ACCELERATION = 0.25
 
-    def __init__(self, position: tuple[int, int]):
+    def __init__(self, position: Vector2):
         self.direction = Vector2(UP)
         super().__init__(position, load_sprite('spaceship'), Vector2(0))
     
@@ -46,3 +46,9 @@ class Spaceship(GameObject):
     
     def accelerate(self):
         self.velocity += self.direction * self.ACCELERATION
+    
+class Asteroid(GameObject):
+    MIN_ASTEROID_DISTANCE = 250
+
+    def __init__(self, position: Vector2):
+        super().__init__(position, load_sprite('asteroid'), get_random_velocity(1, 3))
