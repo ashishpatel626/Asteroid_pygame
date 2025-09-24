@@ -1,7 +1,7 @@
 import pygame
 from pygame.math import Vector2
 from utils import load_sprite, get_random_position
-from models import Spaceship, Asteroid
+from models import Spaceship, Asteroid, Bullet
 
 class asteroids():
     MIN_ASTEROID_DISTANCE = 250
@@ -11,9 +11,9 @@ class asteroids():
         self.screen = pygame.display.set_mode((800, 600))
         self.background = load_sprite('space', False)
         self.clock = pygame.time.Clock()
-
-        self.spaceship = Spaceship(Vector2(400, 300))
-        self.asteroids: list[Spaceship | Asteroid] = []
+        self.asteroids: list[Asteroid] = []
+        self.bullets: list[Bullet] = []
+        self.spaceship = Spaceship(Vector2(400, 300), self.bullets.append)
 
         for _ in range(6):
             while True:
@@ -37,6 +37,9 @@ class asteroids():
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
                 quit()
+            
+            if self.spaceship and event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                self.spaceship.shoot()
         
         is_key_pressed = pygame.key.get_pressed()
 
@@ -58,7 +61,18 @@ class asteroids():
             for asteroids in self.asteroids:
                 if asteroids.collides_with(self.spaceship):
                     self.spaceship = None
-                    break        
+                    break     
+        
+        for bullet in self.bullets[:]:
+            if not self.screen.get_rect().collidepoint(bullet.postion):
+                self.bullets.remove(bullet)
+        
+        for bullet in self.bullets[:]:
+            for asteroid in self.asteroids[:]:
+                if asteroid.collides_with(bullet):
+                    self.asteroids.remove(asteroid)
+                    self.bullets.remove(bullet)
+                    break
 
     def _draw(self):
         self.screen.blit(self.background, (0,0))
@@ -70,8 +84,8 @@ class asteroids():
         pygame.display.flip()
         self.clock.tick(60)
     
-    def _get_game_objects(self) -> list[Spaceship | Asteroid]:
-        game_objects = [*self.asteroids]
+    def _get_game_objects(self) -> list[ Bullet | Asteroid | Spaceship]:
+        game_objects: list[Asteroid | Bullet | Spaceship] = [*self.asteroids, *self.bullets]
         
         if self.spaceship:
             game_objects.append(self.spaceship)
