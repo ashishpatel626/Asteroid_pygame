@@ -21,7 +21,7 @@ class asteroids():
                 if position.distance_to(self.spaceship.postion) > self.MIN_ASTEROID_DISTANCE:
                     break
             
-            self.asteroids.append(Asteroid(position))
+            self.asteroids.append(Asteroid(position, self.asteroids.append))
     
     def main_loop(self):
         while True:
@@ -72,6 +72,7 @@ class asteroids():
                 if asteroid.collides_with(bullet):
                     self.asteroids.remove(asteroid)
                     self.bullets.remove(bullet)
+                    asteroid.split()
                     break
 
     def _draw(self):
