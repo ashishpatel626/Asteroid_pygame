@@ -1,6 +1,6 @@
 from pygame import Surface
 from pygame.math import Vector2
-from utils import load_sprite, wrap_position, get_random_velocity
+from utils import load_sprite, wrap_position, get_random_velocity, load_sound
 from pygame.transform import rotozoom
 from typing import Callable
 
@@ -12,6 +12,7 @@ class GameObject:
         self.sprite = sprite
         self.radius = sprite.get_width() / 2
         self.velocity: Vector2 = Vector2(velocity)
+        self.laser_sound = load_sound('laser')
         
     def draw(self, surface: Surface):
         blit_position = self.postion - Vector2(self.radius)
@@ -53,6 +54,7 @@ class Spaceship(GameObject):
         bullet_velocity = self.direction * self.BULLET_SPEED + self.velocity
         bullet = Bullet(self.postion, bullet_velocity)
         self.create_bullet_callback(bullet)
+        self.laser_sound.play()
     
 class Asteroid(GameObject):
     MIN_ASTEROID_DISTANCE = 250
